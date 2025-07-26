@@ -36,9 +36,32 @@ class OrderController extends Controller
             'order'   => $order,
         ], 201);
     }
+
+    public function update(Request $request)
+    {
+        $validatedData = $request->validate([
+            'status'       => 'nullable|in:pending,approved,rejected',
+        ]);
+        $order = OrderModel::findOrFail($request->id);
+        $order->update($validatedData);
+    }
+
+
     public function show($id)
     {
         $order = OrderModel::findOrFail($id);
         return response()->json($order);
     }
+
+
+   /* public function destroy($id)
+    {
+        $order = OrderModel::findOrFail($id);
+        $order->delete();
+
+        return response()->json([
+            'message' => 'Order deleted successfully',
+        ], 200);
+    }
+        */
 }
